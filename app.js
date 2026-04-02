@@ -1,21 +1,20 @@
 const express = require("express");
-const cors = require("cors"); // 1. เพิ่มการนำเข้า cors
+const cors = require("cors");
 const app = express();
 
-// 2. ต้องวาง app.use(cors()) ไว้ "ก่อน" พวก Routes นะครับ
-// เพื่อให้มันอนุญาต Request ตั้งแต่ก้าวแรกที่เข้ามา
 app.use(cors()); 
-
 app.use(express.json());
 
-// Routes
+// Import Routes
 const authRoutes = require("./routes/auth");
 const userRoutes = require("./routes/users");
 const roleRoutes = require("./routes/roles");
 const permissionRoutes = require("./routes/permissions");
 
+// --- แก้ไขลำดับตรงนี้ ---
+// เอา users ขึ้นก่อน และเช็คว่าใน authRoutes ไม่มีเส้นที่ซ้ำซ้อน
+app.use("/api/users", userRoutes); 
 app.use("/api/auth", authRoutes);
-app.use("/api/users", userRoutes);
 app.use("/api/roles", roleRoutes);
 app.use("/api/permissions", permissionRoutes);
 
